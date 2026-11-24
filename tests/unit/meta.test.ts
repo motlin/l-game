@@ -87,5 +87,6 @@ it("ships the preview card at 1200x630 and the icons the page links", () =>
 // The status bar and the installed app's splash screen take the page's light tabletop color.
 it("paints the page in the color its toolbar and app use", () =>
 {
-	expect(/--bg:light-dark\((#\w+),/.exec(html())?.[1]).toBe(MANIFEST.theme_color);
+	const css = read("src/styles/game.css").toString("utf8");
+	expect(/--bg:light-dark\((#\w+),/.exec(css)?.[1]).toBe(MANIFEST.theme_color);
 });
