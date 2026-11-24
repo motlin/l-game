@@ -12,7 +12,7 @@ The game installs from the browser as a standalone app and plays offline. `src/p
 
 ## Icons
 
-`scripts/icons/*.svg` are the hand-drawn sources. `just icons` copies the favicon to `public/` and renders the PNG icons with `rsvg-convert`, and `just og-image` renders the link preview `public/og.jpg` in Chromium with the Lexend font.
+`scripts/icons/*.svg` are the hand-drawn sources. `just icons` copies the favicon to `public/` and renders the PNG icons with `rsvg-convert`, and `just og-image` renders the link preview `public/og.jpg` in Chromium with the copy of Lexend in `tests/fixtures/fonts/`, so it needs no network.
 
 ## Development
 
