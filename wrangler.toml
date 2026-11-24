@@ -1,0 +1,12 @@
+# The built game as static assets on a Worker, with no Worker script.
+#
+#   just worker   builds and serves dist/ on miniflare
+#   just deploy   deploys to l-game.motlin.com
+#
+# The custom domain is a flag on `wrangler deploy` (see the deploy recipe and .github/workflows/deploy.yml)
+# rather than a route here, the same way whos-that does it.
+name = "l-game"
+compatibility_date = "2026-11-01"
+
+[assets]
+directory = "dist"

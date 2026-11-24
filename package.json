@@ -1,0 +1,39 @@
+{
+	"name": "l-game",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Edward de Bono's L game, for two or four players",
+	"type": "module",
+	"scripts":
+	{
+		"preinstall": "npx only-allow pnpm",
+		"dev": "vp dev",
+		"preview": "vp preview",
+		"build": "vp build",
+		"oxlint": "vp lint . --fix",
+		"oxlint:ci": "vp lint . --format github",
+		"fmt": "oxfmt-next-line",
+		"fmt:ci": "oxfmt-next-line --check",
+		"fallow": "fallow fix --yes --no-create-config",
+		"fallow:ci": "fallow dead-code",
+		"typecheck": "tsc --noEmit",
+		"test": "node node_modules/vitest/dist/cli.js",
+		"test:ui": "node node_modules/vitest/dist/cli.js --ui",
+		"test:browser": "vp build && playwright test",
+		"deploy": "wrangler deploy --domain l-game.motlin.com",
+		"prepare": "VITE_GIT_HOOKS=0 vp config"
+	},
+	"devDependencies":
+	{
+		"@playwright/test": "1.65.0",
+		"@types/node": "^26.6.6",
+		"fallow": "^3.41.0",
+		"markdownlint-cli2": "^0.24.0",
+		"typescript": "^7.0.2",
+		"vite": "catalog:",
+		"vite-plus": "catalog:",
+		"vitest": "catalog:",
+		"wrangler": "^4.158.0"
+	},
+	"packageManager": "pnpm@12.12.1"
+}

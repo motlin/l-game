@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+<defs>
+<linearGradient id="tray" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a4226"/><stop offset=".6" stop-color="#3a2412"/><stop offset="1" stop-color="#4f301a"/></linearGradient>
+<linearGradient id="tile" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbf3e4"/><stop offset="1" stop-color="#eadcc2"/></linearGradient>
+<linearGradient id="red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ee6a5c"/><stop offset="1" stop-color="#c8362b"/></linearGradient>
+<linearGradient id="blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a8cf0"/><stop offset="1" stop-color="#2454bd"/></linearGradient>
+<radialGradient id="disc" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#5a5a5a"/><stop offset="1" stop-color="#0d0d0d"/></radialGradient>
+<radialGradient id="oak" cx=".3" cy="0" r="1.2"><stop offset="0" stop-color="#e2c399"/><stop offset="1" stop-color="#c79f6c"/></radialGradient>
+</defs>
+<g transform="translate(0 0) scale(0.14815)">
+<rect width="432" height="432" rx="70" fill="url(#tray)"/>
+<g transform="translate(16 16)">
+<rect x="3" y="3" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="103" y="3" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="203" y="3" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="303" y="3" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="3" y="103" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="103" y="103" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="203" y="103" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="303" y="103" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="3" y="203" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="103" y="203" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="203" y="203" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="303" y="203" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="3" y="303" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="103" y="303" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="203" y="303" width="94" height="94" rx="10" fill="url(#tile)"/><rect x="303" y="303" width="94" height="94" rx="10" fill="url(#tile)"/>
+<path d="M103 17A14 14 0 0 1 117 3L283 3A14 14 0 0 1 297 17L297 283A14 14 0 0 1 283 297L217 297A14 14 0 0 1 203 283L203 111A14 14 0 0 0 189 97L117 97A14 14 0 0 1 103 83Z" fill="url(#red)"/>
+<path d="M103 117A14 14 0 0 1 117 103L183 103A14 14 0 0 1 197 117L197 289A14 14 0 0 0 211 303L283 303A14 14 0 0 1 297 317L297 383A14 14 0 0 1 283 397L117 397A14 14 0 0 1 103 383Z" fill="url(#blue)"/>
+<circle cx="50" cy="50" r="37" fill="#141414"/>
+<circle cx="350" cy="350" r="37" fill="#141414"/>
+</g>
+</g>
+</svg>

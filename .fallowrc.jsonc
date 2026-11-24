@@ -1,0 +1,11 @@
+{
+	"$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+	// src/pwa/sw.ts is the service worker, which scripts/service-worker-build.ts builds by path.
+	"entry": ["src/pwa/sw.ts", "scripts/*.ts"],
+	// mise installs oxfmt-next-line; see .mise/config.toml.
+	"ignoreBinaries": ["oxfmt-next-line"],
+	"rules":
+	{
+		"unused-dependencies": "error",
+	},
+}
