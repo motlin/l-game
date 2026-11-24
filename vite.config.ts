@@ -219,6 +219,14 @@ export default defineConfig(
 						"vitest/no-identical-title": "error",
 					},
 				},
+				// The game in src/game/ is a port of a single-file artifact that indexes boards and placement tables everywhere.
+				{
+					files: ["src/game/**/*.ts"],
+					rules:
+					{
+						"@typescript-eslint/no-non-null-assertion": "off", // noUncheckedIndexedAccess makes every board lookup optional; a check in place of each `!` would add failure paths the original never had.
+					},
+				},
 				// Each step waits for the last, so the awaits in a loop are the point.
 				{
 					files: ["tests/**/*.ts"],
