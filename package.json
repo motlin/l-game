@@ -27,7 +27,7 @@
 	{
 		"@playwright/test": "1.65.1",
 		"@types/node": "^26.6.6",
-		"fallow": "^3.41.0",
+		"fallow": "^3.44.0",
 		"markdownlint-cli2": "^0.24.0",
 		"typescript": "^7.0.2",
 		"vite": "catalog:",
