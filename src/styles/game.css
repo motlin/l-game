@@ -5,6 +5,11 @@
    LAYOUT: modest title, board first, a side panel for turn, actions and settings; rules below. */
 :root{color-scheme:light dark;--bg:light-dark(#d9b88b,#1c140f);--bg2:light-dark(#cda877,#130d09);--ink:light-dark(#2a1a0e,#f2e6d4);--soft:light-dark(#5e4531,#b9a58c);--panel:light-dark(#f7eee0,#2a2019);--line:light-dark(#c2a072,#40322a);--red:#e0463a;--blue:#2f6be0;--btn:light-dark(#2a1a0e,#f2e6d4);--btnInk:light-dark(#f7eee0,#1c140f)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+/* Lexend is one variable font, served with the page so it works offline. It is declared once for each weight the page
+   uses, as Google Fonts did, so a weight in between renders at the nearest of those. */
+@font-face{font-family:Lexend;font-style:normal;font-weight:400;font-display:swap;src:url(./fonts/lexend-latin.woff2) format("woff2")}
+@font-face{font-family:Lexend;font-style:normal;font-weight:600;font-display:swap;src:url(./fonts/lexend-latin.woff2) format("woff2")}
+@font-face{font-family:Lexend;font-style:normal;font-weight:800;font-display:swap;src:url(./fonts/lexend-latin.woff2) format("woff2")}
 *{box-sizing:border-box;min-width:0}
 [hidden]{display:none!important}
 body{margin:0;background:radial-gradient(120% 80% at 30% 0%,var(--bg),var(--bg2));min-height:100vh;color:var(--ink);font:16px/1.55 Lexend,system-ui,sans-serif;overflow-x:clip}

@@ -18,7 +18,7 @@ const openContext = async (browser: Browser): Promise<BrowserContext> =>
 			serviceWorkers: "allow",
 		},
 	);
-	// The fonts come from Google; the game falls back to its system fonts without them, online or off.
+	// The game serves its own font, so nothing outside the page's origin is needed, online or off.
 	await context.route(/^https?:\/\/(?!127\.0\.0\.1)/, async (route) => route.abort());
 	return context;
 };
@@ -124,6 +124,15 @@ test("offline, a reload still draws the board", async ({browser, baseURL}) =>
 	await expect(page.locator("header h1")).toHaveText("The L Game");
 	await expect(page.locator("svg#board")).toBeVisible();
 	await expect.poll(async () => page.locator("svg#board rect").count()).toBeGreaterThanOrEqual(16);
+	expect(
+		await page.evaluate(async () =>
+			Promise.all(
+				["400 16px Lexend", "600 16px Lexend", "800 16px Lexend"].map(async (font) =>
+					document.fonts.load(font, "The L Game").then((faces) => faces.map((face) => face.status)),
+				),
+			),
+		),
+	).toStrictEqual([["loaded"], ["loaded"], ["loaded"]]);
 	expect(errors).toStrictEqual([]);
 	await context.close();
 });

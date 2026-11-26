@@ -1,12 +1,10 @@
 import {expect, type Page, test} from "@playwright/test";
-import {serveFonts} from "./harness/fonts.ts";
 
 // Opens the game the way a returning player sees it, past the first-visit lesson, and collects page errors.
 async function open(page: Page): Promise<string[]>
 {
 	const errors: string[] = [];
 	page.on("pageerror", (error) => errors.push(error.message));
-	await serveFonts(page);
 	await page.goto("/");
 	await page.locator("#tutSkip").click();
 	return errors;
