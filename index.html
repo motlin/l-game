@@ -27,7 +27,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/src/styles/game.css">
 </head><body>
-<header class="band"><h1>The L Game</h1><p>Edward de Bono's two-player game of blocking, from his 1967 book <i>The Five-Day Course in Thinking</i>.</p><div class="seg players" role="group" aria-label="How many players"><label><input class="qx" type="radio" name="players" value="2" checked><span>2 players</span></label><label><input class="qx" type="radio" name="players" value="4"><span>4 players</span></label></div><div class="seg variants" role="group" aria-label="Variant"><label><input class="qx" type="radio" name="variant" value="c" checked><span>Classic</span></label><label><input class="qx" type="radio" name="variant" value="t"><span>Moving Tiles</span></label></div><div class="seg pieces keepL" role="group" aria-label="Which piece"><label><input class="qx" type="radio" name="piece" value="L"><span>L game</span></label><label><input class="qx" type="radio" name="piece" value="T"><span>T game</span></label><label><input class="qx" type="radio" name="piece" value="LT"><span>L vs T</span></label></div><div class="seg views"><label><input class="qx" type="radio" name="v3" value="2"><span>Top view (2D)</span></label><label><input class="qx" type="radio" name="v3" value="3"><span>Corner view (3D)</span></label></div><div class="rotbtns" role="group" aria-label="Turn the board"><button id="rotL" aria-label="Turn the board left" title="Turn the board left">⟲</button><button id="rotR" aria-label="Turn the board right" title="Turn the board right">⟳</button></div></header>
+<header class="band"><h1 class="setup">The L Game</h1><p class="setup">Edward de Bono's two-player game of blocking, from his 1967 book <i>The Five-Day Course in Thinking</i>.</p><div class="seg players setup" role="group" aria-label="How many players"><label><input class="qx" type="radio" name="players" value="2" checked><span>2 players</span></label><label><input class="qx" type="radio" name="players" value="4"><span>4 players</span></label></div><div class="seg variants setup" role="group" aria-label="Variant"><label><input class="qx" type="radio" name="variant" value="c" checked><span>Classic</span></label><label><input class="qx" type="radio" name="variant" value="t"><span>Moving Tiles</span></label></div><div class="seg pieces keepL setup" role="group" aria-label="Which piece"><label><input class="qx" type="radio" name="piece" value="L"><span>L game</span></label><label><input class="qx" type="radio" name="piece" value="T"><span>T game</span></label><label><input class="qx" type="radio" name="piece" value="LT"><span>L vs T</span></label></div><div class="seg views"><label><input class="qx" type="radio" name="v3" value="2"><span>Top view (2D)</span></label><label><input class="qx" type="radio" name="v3" value="3"><span>Corner view (3D)</span></label></div><div class="rotbtns" role="group" aria-label="Turn the board"><button id="rotL" aria-label="Turn the board left" title="Turn the board left">⟲</button><button id="rotR" aria-label="Turn the board right" title="Turn the board right">⟳</button></div><div class="screenbtns"><button class="main setup" id="play">Play ▶</button><button class="playonly" id="menu" aria-label="Back to the menu and settings">☰ Menu</button></div></header>
 <main class="band game cl">
   <div><div class="coach" id="coach" hidden></div><div class="odds" id="oddsC" hidden aria-label="Chances of winning"></div><div class="tray"><svg id="board" viewBox="0 0 400 400" aria-label="L game board"></svg>
   </div>
@@ -42,11 +42,11 @@
       <button id="undo">Undo</button>
       <button id="hint">Hint</button>
     </div>
-    <div class="an"><label><input type="checkbox" id="anOn"> Show analysis</label><p id="anText" hidden></p>
+    <div class="an setup"><label><input type="checkbox" id="anOn"> Show analysis</label><p id="anText" hidden></p>
       <label style="margin-top:8px"><input type="checkbox" id="lookOn"> Show wins to look for</label><div id="lookBox" hidden></div></div>
-    <div class="pcode"><div><small>Position code</small><b id="codeNow" title="Select to copy">C5 N1 AP</b></div><button id="codeCopy">Copy</button></div>
-    <p class="muted" id="codeMsg" style="margin:-8px 0 0;font-size:13px"></p>
-    <div class="settings">
+    <div class="pcode setup"><div><small>Position code</small><b id="codeNow" title="Select to copy">C5 N1 AP</b></div><button id="codeCopy">Copy</button></div>
+    <p class="muted setup" id="codeMsg" style="margin:-8px 0 0;font-size:13px"></p>
+    <div class="settings setup">
       <fieldset><legend>Opponent</legend><div class="seg"><label><input type="radio" name="mode" value="cpu" checked><span>Computer</span></label><label><input type="radio" name="mode" value="pvp"><span>Two players</span></label></div></fieldset>
       <fieldset id="pvpSet" hidden><legend>Who goes first</legend><div class="row" style="margin:0"><button type="button" id="swapP">⇄ Swap players</button></div><label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="randFirst"> Pick who goes first at random each game</label><p class="muted" id="firstTxt" style="margin:6px 0 0;font-size:14px"></p></fieldset>
       <fieldset id="levelSet"><legend>Computer strength</legend><div class="seg"><label><input type="radio" name="level" value="easy"><span>Easy</span></label><label><input type="radio" name="level" value="medium" checked><span>Medium</span></label><label><input type="radio" name="level" value="hard"><span>Perfect</span></label></div></fieldset>
@@ -73,18 +73,18 @@
       <div class="row"><button class="main" id="qskip">End turn</button><button id="qundo">Undo</button><button id="qend">End match</button></div>
       <p class="qwarn" id="qwarn" hidden></p>
       <div class="qscore" id="qscore" aria-label="Checkmates"></div>
-      <div class="pcode"><div><small>Position code</small><b id="qcodeNow" class="qcode"></b></div><button id="qcopy">Copy</button></div>
-      <form class="qload" id="qload"><input id="qcodeIn" autocomplete="off" spellcheck="false" placeholder="Paste a code to load" aria-label="4-player position code"><button type="submit">Load</button></form>
-      <p class="muted qmsg" id="qcodeMsg"></p>
-      <details class="colors"><summary aria-label="Edit players"><span class="chips" id="qchips"></span><span class="stxt"><span id="qsumTxt"></span><small id="qsumSub"></small></span><span class="chev" aria-hidden="true"></span></summary>
+      <div class="pcode setup"><div><small>Position code</small><b id="qcodeNow" class="qcode"></b></div><button id="qcopy">Copy</button></div>
+      <form class="qload setup" id="qload"><input id="qcodeIn" autocomplete="off" spellcheck="false" placeholder="Paste a code to load" aria-label="4-player position code"><button type="submit">Load</button></form>
+      <p class="muted qmsg setup" id="qcodeMsg"></p>
+      <details class="colors setup"><summary aria-label="Edit players"><span class="chips" id="qchips"></span><span class="stxt"><span id="qsumTxt"></span><small id="qsumSub"></small></span><span class="chev" aria-hidden="true"></span></summary>
         <div class="cbody"><div id="qseats"></div>
           <button id="qcolReset" style="margin:2px 0 10px">Reset colors</button>
           <fieldset><legend>Computer strength</legend><div class="seg"><label><input class="qx" type="radio" name="qlevel" value="easy"><span>Easy</span></label><label><input class="qx" type="radio" name="qlevel" value="fair"><span>Fair</span></label><label><input class="qx" type="radio" name="qlevel" value="hard"><span>Hard</span></label></div></fieldset></div></details>
-      <label class="hamtgl"><input type="checkbox" role="switch" id="qham"> <span><b>🔨 Hammers</b></span></label>
-      <div class="row"><button id="qnew">New match</button><button id="qagain" hidden></button></div>
+      <label class="hamtgl setup"><input type="checkbox" role="switch" id="qham"> <span><b>🔨 Hammers</b></span></label>
+      <div class="row"><button class="setup" id="qnew">New match</button><button id="qagain" hidden></button></div>
     </aside>
   </div>
-  <div class="qrules">
+  <div class="qrules setup">
     <h2>4-player battle rules</h2>
     <ol>
       <li>The board is 6 by 6. Four players each own an L, and there are four black blockers that belong to nobody. The L's start locked together in the middle, each a quarter turn of the next, so the board itself favors nobody. Moving early is still an edge, so the first player rotates every match.</li>
@@ -97,7 +97,7 @@
       <li class="ltonly"><b>L vs T teams:</b> players 1 and 3 are the L team (same color) and players 2 and 4 are the T team, taking turns L, T, L, T. Teammates can't break each other with hammers, and boxing in your own teammate scores nothing. A team wins when both players on the other team are out.</li>
     </ol>
   </div>
-  <div class="qguide">
+  <div class="qguide setup">
 <div class="noT">
     <h2>Manual: good and bad positions</h2>
     <div class="qman">
@@ -211,14 +211,14 @@
       <p class="qfloor" id="mtfloor"></p>
       <div class="row"><button class="main" id="mtskip">End turn</button><button id="mtundo">Undo</button><button id="mtend">End match</button></div>
       <div class="qscore" id="mtscore"></div>
-      <div id="mtseats"></div>
-      <fieldset><legend>Computer strength</legend><div class="seg"><label><input class="qx" type="radio" name="mtlevel" value="easy"><span>Easy</span></label><label><input class="qx" type="radio" name="mtlevel" value="fair"><span>Fair</span></label><label><input class="qx" type="radio" name="mtlevel" value="hard"><span>Hard</span></label></div></fieldset>
-      <label class="hamtgl"><input type="checkbox" role="switch" id="mtham"> <span><b>🔨 Hammers</b></span></label>
-      <label class="hamtgl"><input type="checkbox" role="switch" id="mtnob"> <span><b>🚫 No blockers</b></span></label>
-      <button id="mtnew">New match</button>
+      <div class="setup" id="mtseats"></div>
+      <fieldset class="setup"><legend>Computer strength</legend><div class="seg"><label><input class="qx" type="radio" name="mtlevel" value="easy"><span>Easy</span></label><label><input class="qx" type="radio" name="mtlevel" value="fair"><span>Fair</span></label><label><input class="qx" type="radio" name="mtlevel" value="hard"><span>Hard</span></label></div></fieldset>
+      <label class="hamtgl setup"><input type="checkbox" role="switch" id="mtham"> <span><b>🔨 Hammers</b></span></label>
+      <label class="hamtgl setup"><input type="checkbox" role="switch" id="mtnob"> <span><b>🚫 No blockers</b></span></label>
+      <button class="setup" id="mtnew">New match</button>
     </aside>
   </div>
-  <div class="qrules">
+  <div class="qrules setup">
     <h2>Moving Tiles rules</h2>
     <ol>
       <li id="mtRule1">The same L game, but the floor itself moves. Two players start from the classic 4 by 4 opening with 2 blockers. Four players start from the battle pinwheel on 6 by 6, with 4 blockers.</li>
@@ -235,14 +235,14 @@
     </ol>
   </div>
 </section>
-<section class="band lose cl" id="lose">
+<section class="band lose cl setup" id="lose">
   <div class="thead"><div><h2>Ways you can lose</h2><p id="loseSum"></p></div>
     <div id="loseCtl" hidden><fieldset><legend>Order the ways</legend><div class="seg"><label><input class="qx" type="radio" name="lsort" value="rare" checked><span>Rarest first</span></label><label><input class="qx" type="radio" name="lsort" value="common"><span>Most common first</span></label></div></fieldset>
     <label class="tgl" id="loseTglWrap" hidden><input type="checkbox" id="loseAll"> Also show positions already lost with perfect play</label></div></div>
   <div id="loseBody"></div>
   <div id="loseTip"></div>
 </section>
-<section class="band codes cl" id="codes">
+<section class="band codes cl setup" id="codes">
   <h2>Position codes</h2>
   <p class="lede" id="codeLede">Any position fits in six characters, like <b class="cd">C5 N1 AP</b>: two for the first player's L, two for the second player's L, and two for the discs. Once you learn the three rules below you can read or write a code by eye, and set up any position you like to try your own variants.</p>
   <div class="cgrid">
@@ -263,7 +263,7 @@
     </form>
   </div>
 </section>
-<section class="band rules cl">
+<section class="band rules cl setup">
   <h2>How to play</h2>
   <ol>
     <li id="ruleDiscs">The board is 4 by 4. Each player owns one L-shaped piece covering four squares, and two black neutral discs belong to nobody.</li>

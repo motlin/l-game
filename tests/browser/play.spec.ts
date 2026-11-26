@@ -32,10 +32,26 @@ async function swipe(page: Page, board: string, cells: number[], n: number): Pro
 	await page.mouse.up();
 }
 
-test("a 2-player game against the computer takes a move and answers it", async ({page}) =>
+test("a 2-player game against the computer takes a move and answers it on the play screen", async ({page}) =>
 {
 	const errors = await open(page);
 	await expect(page.locator("#codeNow")).toHaveText("C5 N1 AP");
+	await page.locator("#play").click();
+	await expect(page).toHaveURL(/#play$/);
+	for (const hidden of [
+		"header h1",
+		".seg.players",
+		"#play",
+		".settings",
+		"main .pcode",
+		".an",
+		"#lose",
+		"#codes",
+		".rules",
+	])
+		await expect(page.locator(hidden)).toBeHidden();
+	for (const shown of ["#board", "#status", "#skip", "#undo", "#hint", ".seg.views", "#rotL", "#menu"])
+		await expect(page.locator(shown)).toBeVisible();
 	// The red L on B C G K moves to C G K L, which keeps the game a draw, so the computer cannot win at once.
 	await swipe(page, "#board", [2, 6, 10, 11], 4);
 	await expect(page.locator("#status")).toHaveText("Your move: a disc (optional)");
@@ -48,6 +64,10 @@ test("a 2-player game against the computer takes a move and answers it", async (
 		},
 	);
 	await expect(page.locator("#codeNow")).not.toHaveText("C5 N1 AP");
+	await page.locator("#menu").click();
+	await expect(page).not.toHaveURL(/#play$/);
+	for (const shown of ["header h1", ".settings", "#play", "#lose"]) await expect(page.locator(shown)).toBeVisible();
+	await expect(page.locator("#menu")).toBeHidden();
 	expect(errors).toStrictEqual([]);
 });
 
@@ -67,6 +87,11 @@ test("switching to 4 players shows the battle board with four L's and four block
 	await expect(page.locator("#qstatus")).toHaveText("P1: move your L");
 	await expect(page.locator("#qcodeNow")).toHaveText("1 B41 C23 E35 D57 A1 A6 F1 F6");
 	await expect.poll(async () => page.locator("svg#qboard rect").count()).toBeGreaterThanOrEqual(36);
+	await page.locator("#qnew").click();
+	await expect(page).toHaveURL(/#play$/);
+	for (const hidden of ["#qload", "#quad .colors", "#quad .qrules", ".qguide", "#qnew"])
+		await expect(page.locator(hidden)).toBeHidden();
+	for (const shown of ["#qboard", "#qskip", "#qundo", "#qscore"]) await expect(page.locator(shown)).toBeVisible();
 	expect(errors).toStrictEqual([]);
 });
 

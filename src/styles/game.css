@@ -13,7 +13,9 @@ header.band{padding-bottom:8px;max-width:1240px;margin:auto}
 h1{font-size:clamp(32px,5vw,48px);line-height:1.05;margin:0;font-weight:800;text-wrap:balance}
 header p{margin:6px 0 0;color:var(--soft)}
 .game{display:grid;grid-template-columns:minmax(0,540px) minmax(0,330px);gap:clamp(18px,3vw,36px);justify-content:center;align-items:start;padding-top:14px}
-.rotbtns{display:inline-flex;gap:6px;margin-top:10px;vertical-align:top}.rotbtns button{font-size:22px;min-width:48px;padding:0}
+.rotbtns,.screenbtns{display:inline-flex;gap:6px;margin-top:10px;vertical-align:top}.screenbtns{margin-left:6px}
+/* The play screen (#play, see src/game/screen.ts) hides the settings, codes, rules and guides, and shows the Menu button. */
+body[data-screen=play] .setup,body:not([data-screen=play]) .playonly{display:none!important}body[data-screen=play] header.band{padding-top:10px;padding-bottom:0}.rotbtns button{font-size:22px;min-width:48px;padding:0}
 .modes{max-width:600px!important}.modes,.views{max-width:440px;margin-top:10px}.modes{margin-top:14px}
 header .seg{display:inline-flex;width:min(440px,100%);}header .modes{width:min(600px,100%)}header .seg{margin-right:10px;vertical-align:top}header .players{width:min(260px,100%)}.ltonly{display:none}.pieceLT .ltonly{display:list-item}.seg label.off{opacity:.4;cursor:not-allowed}header .pieces{width:min(360px,100%)}header .variants{width:min(320px,100%)}.pieceT .noT{display:none!important}
 .qd{max-width:1240px;margin:auto}

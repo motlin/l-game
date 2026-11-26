@@ -27,7 +27,7 @@ export interface Options
 
 // A recorded game: its positions as posKey strings, the winner (null when unfinished), the starting code, the human's
 // side against the computer (null for two players), and when it was saved.
-export interface Game
+interface Game
 {
 	p: string[];
 	w: Side | null;
