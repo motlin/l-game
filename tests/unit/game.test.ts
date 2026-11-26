@@ -2,6 +2,7 @@ import {describe, expect, it} from "vite-plus/test";
 import {qCode, qFmt, qParse, START_L, PL} from "../../src/game/battle/rules.ts";
 import {createBoard, fmtCode, type Position, type Side} from "../../src/game/classic/rules.ts";
 import {solve} from "../../src/game/classic/solver.ts";
+import {Redo} from "../../src/game/redo.ts";
 
 const games =
 {
@@ -254,6 +255,31 @@ describe("4-player position codes", () =>
 					B: [0, 30, 5, 35],
 					turn: 0,
 				},
+			},
+		);
+	});
+});
+
+describe("redo", () =>
+{
+	it("steps back through every undo in turn, and a new move in between ends it", () =>
+	{
+		const redo = new Redo();
+		redo.undone("C", "B");
+		redo.undone("B", "B");
+		redo.undone("B", "A");
+		const walk = [redo.can("A"), redo.redo("A"), redo.can("B"), redo.redo("B"), redo.can("C"), redo.redo("C")];
+		redo.undone("C", "B");
+		const moved = [redo.can("D"), redo.can("B"), redo.redo("B")];
+		expect(
+			{
+				walk,
+				moved,
+			},
+		).toStrictEqual(
+			{
+				walk: [true, "B", true, "C", false, undefined],
+				moved: [false, false, undefined],
 			},
 		);
 	});

@@ -3,6 +3,7 @@ import {$, $$as, $as, cleanName, parseJSON} from "../dom.ts";
 import {CONN, DMAP, GENPL, keyOf, LPATH, type Placements} from "../geometry.ts";
 import {type IsoBoard, cellAt as isoCellAt, render as isoRender} from "../iso.ts";
 import {L_SHAPE, PIECE, T_SHAPE} from "../piece.ts";
+import {Redo} from "../redo.ts";
 import {getItem, setItem} from "../storage.ts";
 import {MODE_CHANGED, NAMES_RESET, view, VIEW_CHANGED} from "../view.ts";
 import {type Floor, islands, connected, moveTile, nbs, targets} from "./floor.ts";
@@ -133,6 +134,8 @@ const rc = (r: number, c: number): number => (r + OFF) * G + (c + OFF);
 const place = (cs: number[]): number => placements.PIDX.get(keyOf(cs))!;
 
 let started = false;
+// Takes back an undo within the turn.
+const redo = new Redo();
 let S: MState = blank();
 let snap = "",
 	sel: number[] = [],
@@ -1162,6 +1165,17 @@ function moveB(i: number, c: number): void
 	render();
 }
 
+// After Undo or Redo: nothing picked and nothing marked as just moved.
+function afterUndo(): void
+{
+	sel = [];
+	selB = -1;
+	pick = -1;
+	lastL = null;
+	lastT = null;
+	render();
+}
+
 function wireInput(): void
 {
 	const s = svg();
@@ -1287,13 +1301,18 @@ function wireInput(): void
 	$("#mtundo").addEventListener("click", () =>
 	{
 		if (!myTurn()) return;
+		const before = JSON.stringify(S);
 		S = parseJSON<MState>(snap);
-		sel = [];
-		selB = -1;
-		pick = -1;
-		lastL = null;
-		lastT = null;
-		render();
+		redo.undone(before, JSON.stringify(S));
+		afterUndo();
+	});
+	$("#mtredo").addEventListener("click", () =>
+	{
+		if (!myTurn()) return;
+		const redone = redo.redo(JSON.stringify(S));
+		if (redone === undefined) return;
+		S = parseJSON<MState>(redone);
+		afterUndo();
 	});
 	$("#mtend").addEventListener("click", () =>
 	{
@@ -1846,6 +1865,7 @@ function renderPanel(p: number, hum: boolean): void
 	sk.textContent = S.phase === "B" ? "Skip blocker" : "End turn";
 	sk.disabled = !(hum && (S.phase === "B" || S.phase === "T"));
 	$as("#mtundo", HTMLButtonElement).disabled = !hum || (S.phase === "L" && !sel.length);
+	$as("#mtredo", HTMLButtonElement).disabled = !hum || !redo.can(JSON.stringify(S));
 	$as("#mtend", HTMLButtonElement).disabled = S.over;
 	const o = occ(S);
 	$("#mtscore").innerHTML = [...Array(NP).keys()]

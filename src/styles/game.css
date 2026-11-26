@@ -103,6 +103,8 @@ svg#board{display:block;width:100%;aspect-ratio:1;touch-action:none;user-select:
 #instr{margin:0;color:var(--soft);min-height:3.1em}
 #instr.err{color:var(--red);font-weight:600}
 .row{display:flex;flex-wrap:wrap;gap:8px}
+/* Undo and Redo are arrows, named for screen readers and on hover, so a turn's buttons fit on one line in the narrow panel. */
+button.ur{font-size:20px;padding:0 12px}@media(max-width:480px){.panel{padding:16px}.panel .row{gap:6px}.panel .row button{padding:0 10px}.panel .row button.ur{padding:0 9px}}
 button{font:inherit;font-size:15px;min-height:44px;padding:0 16px;border-radius:12px;border:2px solid var(--btn);background:transparent;color:var(--ink);cursor:pointer;font-weight:600}
 button.main{background:var(--btn);color:var(--btnInk)}
 button:disabled{opacity:.35;cursor:default}

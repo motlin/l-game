@@ -37,7 +37,8 @@
     <div class="row">
       <button class="main" id="again" hidden>Play again</button>
       <button class="main" id="skip">End turn</button>
-      <button id="undo">Undo</button>
+      <button class="ur" id="undo" aria-label="Undo" title="Undo">↶</button>
+      <button class="ur" id="redo" aria-label="Redo" title="Redo">↷</button>
       <button id="hint">Hint</button>
     </div>
     <div class="an setup"><label><input type="checkbox" id="anOn"> Show analysis</label><p id="anText" hidden></p>
@@ -68,7 +69,7 @@
       <p id="qinstr"></p>
       <p class="qnews" id="qnews" hidden></p>
       <p class="qfloor" id="qfloor"></p>
-      <div class="row"><button class="main" id="qskip">End turn</button><button id="qundo">Undo</button><button id="qend">End match</button></div>
+      <div class="row"><button class="main" id="qskip">End turn</button><button class="ur" id="qundo" aria-label="Undo" title="Undo">↶</button><button class="ur" id="qredo" aria-label="Redo" title="Redo">↷</button><button id="qend">End match</button></div>
       <p class="qwarn" id="qwarn" hidden></p>
       <div class="qscore" id="qscore" aria-label="Checkmates"></div>
       <div class="pcode setup"><div><small>Position code</small><b id="qcodeNow" class="qcode"></b></div><button id="qcopy">Copy</button></div>
@@ -207,7 +208,7 @@
       <p id="mtinstr"></p>
       <p class="qnews" id="mtnews" hidden></p>
       <p class="qfloor" id="mtfloor"></p>
-      <div class="row"><button class="main" id="mtskip">End turn</button><button id="mtundo">Undo</button><button id="mtend">End match</button></div>
+      <div class="row"><button class="main" id="mtskip">End turn</button><button class="ur" id="mtundo" aria-label="Undo" title="Undo">↶</button><button class="ur" id="mtredo" aria-label="Redo" title="Redo">↷</button><button id="mtend">End match</button></div>
       <div class="qscore" id="mtscore"></div>
       <div class="setup" id="mtseats"></div>
       <fieldset class="setup"><legend>Computer strength</legend><div class="seg"><label><input class="qx" type="radio" name="mtlevel" value="easy"><span>Easy</span></label><label><input class="qx" type="radio" name="mtlevel" value="fair"><span>Fair</span></label><label><input class="qx" type="radio" name="mtlevel" value="hard"><span>Hard</span></label></div></fieldset>

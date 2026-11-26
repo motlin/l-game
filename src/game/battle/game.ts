@@ -3,6 +3,7 @@ import {$, $$as, $as, cleanName, copyCode, parseJSON} from "../dom.ts";
 import {CONN, DMAP, keyOf, LPATH} from "../geometry.ts";
 import {type IsoBoard, cellAt as isoCellAt, render as isoRender} from "../iso.ts";
 import {PIECE} from "../piece.ts";
+import {Redo} from "../redo.ts";
 import {getItem, setItem} from "../storage.ts";
 import {NAMES_RESET, view, VIEW_CHANGED} from "../view.ts";
 import {crackTile, crown, crownMini, CW, D, setTurn, shapes, statue, stoneFloor, xy} from "./art.ts";
@@ -77,6 +78,8 @@ const hex2rgb = (c: string): number[] =>
 
 // The match in play. Until the first one starts, a blank stands in.
 let started = false;
+// Takes back an undo within the turn.
+const redo = new Redo();
 let S: QState =
 {
 	L: [...START_L],
@@ -1154,6 +1157,16 @@ function commitL(): void
 		);
 }
 
+// After Undo or Redo: nothing picked and nothing marked as just moved.
+function afterUndo(): void
+{
+	sel = [];
+	selB = -1;
+	lastL = null;
+	lastB = null;
+	render();
+}
+
 function wireInput(): void
 {
 	const s = svg();
@@ -1243,12 +1256,18 @@ function wireInput(): void
 	$("#qundo").addEventListener("click", () =>
 	{
 		if (!myTurn()) return;
+		const before = JSON.stringify(S);
 		S = parseJSON<QState>(snapT);
-		sel = [];
-		selB = -1;
-		lastL = null;
-		lastB = null;
-		render();
+		redo.undone(before, JSON.stringify(S));
+		afterUndo();
+	});
+	$("#qredo").addEventListener("click", () =>
+	{
+		if (!myTurn()) return;
+		const redone = redo.redo(JSON.stringify(S));
+		if (redone === undefined) return;
+		S = parseJSON<QState>(redone);
+		afterUndo();
 	});
 	$("#qend").addEventListener("click", () =>
 	{
@@ -1579,6 +1598,7 @@ function renderPanel(p: number, hum: boolean): void
 	}
 	$as("#qskip", HTMLButtonElement).disabled = !(hum && S.phase === "B");
 	$as("#qundo", HTMLButtonElement).disabled = !hum || (S.phase === "L" && !sel.length);
+	$as("#qredo", HTMLButtonElement).disabled = !hum || !redo.can(JSON.stringify(S));
 	$as("#qend", HTMLButtonElement).disabled = S.over;
 	const MOB = ((): number[] =>
 	{

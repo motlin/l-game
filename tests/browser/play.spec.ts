@@ -62,6 +62,13 @@ test("a 2-player game against the computer takes a move and answers it on the pl
 		},
 	);
 	await expect(page.locator("#codeNow")).not.toHaveText("C5 N1 AP");
+	const played = await page.locator("#codeNow").textContent();
+	await expect(page.locator("#redo")).toBeDisabled();
+	await page.locator("#undo").click();
+	await expect(page.locator("#codeNow")).toHaveText("C5 N1 AP");
+	await page.locator("#redo").click();
+	await expect(page.locator("#codeNow")).toHaveText(played!);
+	await expect(page.locator("#redo")).toBeDisabled();
 	await page.locator("#menu").click();
 	await expect(page).not.toHaveURL(/#play$/);
 	for (const shown of ["header h1", ".settings", "#play", "#lose"]) await expect(page.locator(shown)).toBeVisible();
@@ -85,11 +92,21 @@ test("switching to 4 players shows the battle board with four L's and four block
 	await expect(page.locator("#qstatus")).toHaveText("P1: move your L");
 	await expect(page.locator("#qcodeNow")).toHaveText("1 B41 C23 E35 D57 A1 A6 F1 F6");
 	await expect.poll(async () => page.locator("svg#qboard rect").count()).toBeGreaterThanOrEqual(36);
-	await page.locator("#qnew").click();
+	await page.locator("#play").click();
 	await expect(page).toHaveURL(/#play$/);
 	for (const hidden of ["#qload", "#quad .colors", "#quad .qrules", ".qguide", "#qnew"])
 		await expect(page.locator(hidden)).toBeHidden();
-	for (const shown of ["#qboard", "#qskip", "#qundo", "#qscore"]) await expect(page.locator(shown)).toBeVisible();
+	for (const shown of ["#qboard", "#qskip", "#qundo", "#qredo", "#qscore"])
+		await expect(page.locator(shown)).toBeVisible();
+	// P1's L on B2 B3 B4 C4 moves to A2 A3 A4 B4, then the move is undone and redone.
+	await swipe(page, "#qboard", [6, 12, 18, 19], 6);
+	const moved = await page.locator("#qstatus").textContent();
+	expect(moved).not.toBe("P1: move your L");
+	await page.locator("#qundo").click();
+	await expect(page.locator("#qstatus")).toHaveText("P1: move your L");
+	await page.locator("#qredo").click();
+	await expect(page.locator("#qstatus")).toHaveText(moved!);
+	await expect(page.locator("#qredo")).toBeDisabled();
 	expect(errors).toStrictEqual([]);
 });
 

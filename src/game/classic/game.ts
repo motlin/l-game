@@ -2,6 +2,7 @@ import {ODDS} from "../art.ts";
 import {$, $$as, $as, parseJSON} from "../dom.ts";
 import {DMAP, LPATH} from "../geometry.ts";
 import {type IsoBoard, cellAt as isoCellAt, render as isoRender} from "../iso.ts";
+import {Redo} from "../redo.ts";
 import {removeItem, setItem} from "../storage.ts";
 import {view, VIEW_CHANGED} from "../view.ts";
 import {initCodes, showCode, startTxt} from "./codes.ts";
@@ -122,6 +123,15 @@ function saveCur(): void
 }
 
 // ---- flow
+// The game as Undo and Redo see it: the turns so far and the position now.
+const undoState = (): string =>
+	JSON.stringify(
+		{
+			hist: st.hist,
+			G: st.G,
+		},
+	);
+const redo = new Redo();
 function newGame(code?: string, tut?: boolean): void
 {
 	stopHint();
@@ -784,6 +794,7 @@ function renderPanel(t: Side, hum: boolean): void
 	$as("#hint", HTMLButtonElement).disabled = !hum || !ready();
 	$as("#undo", HTMLButtonElement).disabled =
 		st.busy || !!G.over || (G.phase === "L" && !sel.length && st.hist.length <= (opt.mode === "cpu" ? 2 : 1));
+	$as("#redo", HTMLButtonElement).disabled = st.busy || !!G.over || !redo.can(undoState());
 	$("#levelSet").hidden = opt.mode !== "cpu";
 	$("#sideSet").hidden = opt.mode !== "cpu";
 	$("#pvpSet").hidden = opt.mode !== "pvp";
@@ -1037,6 +1048,7 @@ function wireInput(): void
 	$("#undo").addEventListener("click", () =>
 	{
 		if (st.busy || st.G.over) return;
+		const before = undoState();
 		if (st.G.phase === "N" || st.sel.length) st.G = parseJSON<Position>(st.hist[st.hist.length - 1]!);
 		else
 		{
@@ -1045,6 +1057,26 @@ function wireInput(): void
 			for (let i = 0; i < n; i++) st.hist.pop();
 			st.G = parseJSON<Position>(st.hist[st.hist.length - 1]!);
 		}
+		redo.undone(before, undoState());
+		afterUndo();
+	});
+	$("#redo").addEventListener("click", () =>
+	{
+		if (st.busy || st.G.over) return;
+		const redone = redo.redo(undoState());
+		if (redone === undefined) return;
+		const saved = parseJSON<
+		{
+			hist: string[];
+			G: Position;
+		}>(redone);
+		st.hist = saved.hist;
+		st.G = saved.G;
+		afterUndo();
+	});
+	// After Undo or Redo: nothing picked or hinted, nothing flashing, and the game saved and drawn again.
+	function afterUndo(): void
+	{
 		st.sel = [];
 		selN = -1;
 		st.hintMv = null;
@@ -1054,7 +1086,7 @@ function wireInput(): void
 		saveCur();
 		render();
 		renderTree();
-	});
+	}
 	const hb = $("#hint");
 	hb.title = "Hold to see the best move";
 	hb.addEventListener("pointerdown", (e) =>
