@@ -23,6 +23,8 @@ export interface Options
 	start?: string;
 	tview?: string;
 	tutDone?: boolean;
+	// Whether the perfect-play verdict shows above the board; it does until turned off.
+	verdict?: boolean;
 }
 
 // A recorded game: its positions as posKey strings, the winner (null when unfinished), the starting code, the human's

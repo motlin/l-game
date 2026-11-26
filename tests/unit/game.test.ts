@@ -2,6 +2,7 @@ import {describe, expect, it} from "vite-plus/test";
 import {qCode, qFmt, qParse, START_L, PL} from "../../src/game/battle/rules.ts";
 import {createBoard, fmtCode, type Position, type Side} from "../../src/game/classic/rules.ts";
 import {solve} from "../../src/game/classic/solver.ts";
+import {describeVerdict, outcome} from "../../src/game/classic/verdict.ts";
 import {Redo} from "../../src/game/redo.ts";
 
 const games =
@@ -282,5 +283,94 @@ describe("redo", () =>
 				moved: [false, false, undefined],
 			},
 		);
+	});
+});
+
+// A solution holding only these replies, as [value, plies] for the opponent to move.
+const replySolution = (replies: [number, number][]): Parameters<typeof outcome>[0] => (
+{
+	val: Int8Array.from(replies.map(([v]) => v)),
+	dep: Int16Array.from(replies.map(([, d]) => d)),
+});
+
+describe("the perfect-play verdict", () =>
+{
+	const names =
+	{
+		R: "Ann",
+		B: "Bo",
+	};
+	it("names the winner and counts the winner's moves, from the side to move", () =>
+	{
+		expect([
+			describeVerdict(1, 1, "R", names, "R"),
+			describeVerdict(1, 5, "B", names, "R"),
+			describeVerdict(-1, 4, "R", names, "R"),
+			describeVerdict(-1, 2, "R", names, null),
+			describeVerdict(2, 0, "B", names, null),
+		]).toStrictEqual([
+			{
+				kind: "win",
+				text: "You win in 1 move",
+			},
+			{
+				kind: "loss",
+				text: "Computer wins in 3 moves",
+			},
+			{
+				kind: "loss",
+				text: "Computer wins in 2 moves",
+			},
+			{
+				kind: "decisive",
+				text: "Bo wins in 1 move",
+			},
+			{
+				kind: "draw",
+				text: "Draw with perfect play",
+			},
+		]);
+	});
+	it("scores a half-finished turn by the best of the replies it can still leave", () =>
+	{
+		// A quick loss for them wins, a draw beats losing, and when every reply wins for them the mover holds out longest.
+		expect([
+			outcome(
+				replySolution([
+					[1, 3],
+					[-1, 4],
+					[-1, 2],
+					[2, 0],
+				]),
+				[0, 1, 2, 3],
+			),
+			outcome(
+				replySolution([
+					[1, 3],
+					[2, 0],
+				]),
+				[0, 1],
+			),
+			outcome(
+				replySolution([
+					[1, 3],
+					[1, 7],
+				]),
+				[0, 1],
+			),
+		]).toStrictEqual([
+			{
+				v: 1,
+				d: 3,
+			},
+			{
+				v: 2,
+				d: 0,
+			},
+			{
+				v: -1,
+				d: 8,
+			},
+		]);
 	});
 });

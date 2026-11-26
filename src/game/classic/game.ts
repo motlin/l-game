@@ -62,6 +62,7 @@ import
 } from "./state.ts";
 import {openTree, initTree, renderTree} from "./tree.ts";
 import {findTutPos, initTutorial, renderCoach, showIntro} from "./tutorial.ts";
+import {describeVerdict, outcome, type Verdict} from "./verdict.ts";
 
 // The 2-player game: the flow of a game, the computer player, hints, input on the board, and drawing it.
 
@@ -840,31 +841,38 @@ function renderPanel(t: Side, hum: boolean): void
 	}
 }
 
-// The analysis line and the wins to look for, under their checkboxes.
+// The perfect-play verdict above the board, and the wins to look for under their checkbox. Part way through a turn,
+// with the piece already down, the verdict is the best the mover can still make of it with the disc.
 function renderAnalysis(t: Side, hum: boolean): void
 {
 	const {G} = st;
-	const an = $("#anText");
-	an.hidden = !$as("#anOn", HTMLInputElement).checked;
-	if (!an.hidden)
+	const vd = $("#verdict");
+	const at = G.phase === "L" ? stateOf(G, t) : 0;
+	vd.hidden = !$as("#anOn", HTMLInputElement).checked || !!G.over || at < 0;
+	if (!vd.hidden)
 	{
-		if (!ready()) an.textContent = "Solving every position…";
-		else if (G.over) an.textContent = "Game over. The dashed outline shows where the last L moved from.";
-		else if (G.phase === "N") an.textContent = "Analysis shows at the start of each turn.";
-		else
+		let shown: Verdict =
 		{
-			const {val, dep} = sol(),
-				s = stateOf(G, t),
-				v = val[s],
-				d = dep[s]!,
-				n = NAME[t];
-			an.textContent =
-				v === 1
-					? `${n} can force a win in ${(d + 1) / 2} move${d > 1 ? "s" : ""}.`
-					: v === -1
-						? `${n} is lost against perfect play, holding out at most ${d / 2} more move${d > 2 ? "s" : ""}.`
-						: "Balanced: perfect play from here is a draw.";
+			kind: "draw",
+			text: "Solving every position…",
+		};
+		if (ready())
+		{
+			const {v, d} =
+				G.phase === "L"
+					?
+						{
+							v: sol().val[at]!,
+							d: sol().dep[at]!,
+						}
+					: outcome(
+							sol(),
+							optionsFor(t, G.L[t], parseJSON<Position>(st.hist[st.hist.length - 1]!)).map((m) => m.s),
+						);
+			shown = describeVerdict(v, d, t, NAME, opt.mode === "cpu" ? opt.human : null);
 		}
+		vd.className = `verdict ${shown.kind}`;
+		vd.textContent = shown.text;
 	}
 	const lb = $("#lookBox");
 	lb.hidden = !$as("#lookOn", HTMLInputElement).checked;
@@ -1144,7 +1152,14 @@ function wireInput(): void
 		save();
 		$("#firstTxt").textContent = opt.randFirst ? "From the next game on, a random player goes first." : "";
 	});
-	$("#anOn").addEventListener("change", render);
+	const anOn = $as("#anOn", HTMLInputElement);
+	anOn.checked = opt.verdict !== false;
+	anOn.addEventListener("change", () =>
+	{
+		opt.verdict = anOn.checked;
+		save();
+		render();
+	});
 	$("#lookOn").addEventListener("change", render);
 	window.addEventListener(VIEW_CHANGED, () =>
 	{

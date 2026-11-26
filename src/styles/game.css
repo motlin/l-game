@@ -99,7 +99,7 @@ svg#board{display:block;width:100%;aspect-ratio:1;touch-action:none;user-select:
 .turn{display:flex;align-items:center;gap:12px}
 .chip{width:34px;height:34px;border-radius:9px;flex:none;box-shadow:0 3px 0 rgba(0,0,0,.25)}
 .turn h2{margin:0;font-size:22px;line-height:1.15}
-.turn h2,#instr,.score span,.qrow .qn,.result,#sumNames,#qsumTxt,.qfinal span,#codeStartTxt,#anText{overflow-wrap:anywhere}
+.turn h2,#instr,.score span,.qrow .qn,.result,#sumNames,#qsumTxt,.qfinal span,#codeStartTxt,.verdict{overflow-wrap:anywhere}
 #instr{margin:0;color:var(--soft);min-height:3.1em}
 #instr.err{color:var(--red);font-weight:600}
 .row{display:flex;flex-wrap:wrap;gap:8px}
@@ -113,7 +113,7 @@ button:focus-visible,.seg input:focus-visible+span{outline:3px solid var(--blue)
 .an label{display:flex;gap:8px;align-items:center;cursor:pointer;color:var(--ink);font-weight:600}
 .an input{width:18px;height:18px}
 #lookBox{margin-top:6px;display:grid;gap:4px}#lookBox button{min-height:34px;font-size:13px;text-align:left;padding:4px 10px;font-weight:600}#lookBox p{margin:0}
-#anText{margin:6px 0 0}
+.verdict{margin:0 0 10px;padding:8px 14px;border-radius:14px;background:var(--panel);border-left:6px solid #9c8f7d;font-weight:600;box-shadow:0 8px 18px -14px rgba(30,15,5,.6)}.verdict.win{border-left-color:#2e9d5b;color:light-dark(#1f6e40,#7fd6a2)}.verdict.loss{border-left-color:#d13b30;color:light-dark(#a52a21,#f08a80)}.verdict.decisive{border-left-color:#2f6be0}
 fieldset{border:0;margin:0;padding:0}
 legend{font-size:13px;color:var(--soft);margin-bottom:4px}
 .seg{display:flex;background:light-dark(#ead9c0,#1f1813);border-radius:12px;padding:3px}

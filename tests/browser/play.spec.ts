@@ -50,6 +50,7 @@ test("a 2-player game against the computer takes a move and answers it on the pl
 		await expect(page.locator(hidden)).toBeHidden();
 	for (const shown of ["#board", "#status", "#skip", "#undo", "#hint", ".seg.views", "#rotL", "#menu"])
 		await expect(page.locator(shown)).toBeVisible();
+	await expect(page.locator("#verdict")).toHaveText("Draw with perfect play");
 	// The red L on B C G K moves to C G K L, which keeps the game a draw, so the computer cannot win at once.
 	await swipe(page, "#board", [2, 6, 10, 11], 4);
 	await expect(page.locator("#status")).toHaveText("Your move: a disc (optional)");
